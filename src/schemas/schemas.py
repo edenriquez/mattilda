@@ -40,6 +40,24 @@ class SchoolResponse(SchoolBase):
     id: int
     createdAt: datetime
 
+class InvoiceBase(BaseModel):
+    name: str
+    amount: int
+    student_id: int
+
+class InvoiceCreate(InvoiceBase):
+    pass
+
+class InvoiceUpdate(InvoiceBase):
+    pass
+
+class InvoicePath(BaseModel):
+    invoice_id: int = Field(..., description="The ID of the invoice")
+
+class InvoiceResponse(InvoiceBase):
+    id: int
+    createdAt: datetime
+
 class Pagination(BaseModel):
     page: int
     per_page: int
@@ -52,6 +70,10 @@ class SchoolEnvelope(BaseModel):
 
 class StudentEnvelope(BaseModel):
     data: List[StudentResponse]
+    pagination: Pagination
+
+class InvoiceEnvelope(BaseModel):
+    data: List[InvoiceResponse]
     pagination: Pagination
 
 # TODO: implement this

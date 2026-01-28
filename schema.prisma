@@ -25,13 +25,26 @@ model schools {
 // 3. Search student by school and name
 
 model students {
-    id        Int      @id @default(autoincrement())
+    id        Int        @id @default(autoincrement())
     name      String
     schoolId  Int
-    createdAt DateTime @default(now())
-    school    schools  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    createdAt DateTime   @default(now())
+    school    schools    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    invoices  invoices[]
 
     @@index([name])
     @@index([schoolId])
     @@index([schoolId, name])
+}
+
+model invoices {
+    id        Int      @id @default(autoincrement())
+    studentId Int
+    name      String
+    amount    BigInt
+    createdAt DateTime @default(now())
+    student   students @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+    @@index([studentId])
+    @@index([studentId, amount])
 }

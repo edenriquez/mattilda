@@ -3,6 +3,7 @@ from flask_openapi3 import OpenAPI, Info, Tag
 from src.db import db
 from src.api.school_routes import school_router
 from src.api.student_routes import student_router
+from src.api.invoice_routes import invoice_router
 from dotenv import load_dotenv
 from flask import redirect
 
@@ -14,6 +15,7 @@ def create_app():
 
     app.register_api(school_router)
     app.register_api(student_router)
+    app.register_api(invoice_router)
 
     @app.get("/")
     def index():
