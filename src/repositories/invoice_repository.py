@@ -38,12 +38,16 @@ class InvoiceRepository:
         finally:
             await db.disconnect()
 
-    async def update(self, invoice_id: int, name: str, amount: int, student_id: int):
+    async def update(self, invoice_id: int, data: dict):
         await self._ensure_db()
+        # Map student_id to studentId for Prisma
+        if 'student_id' in data:
+            data['studentId'] = data.pop('student_id')
+            
         try:
             return await db.invoices.update(
                 where={'id': invoice_id},
-                data={'name': name, 'amount': amount, 'studentId': student_id}
+                data=data
             )
         finally:
             await db.disconnect()
@@ -52,5 +56,17 @@ class InvoiceRepository:
         await self._ensure_db()
         try:
             return await db.invoices.delete(where={'id': invoice_id})
+        finally:
+            await db.disconnect()
+
+    async def find_by_school(self, school_id: int, take: int = 20, skip: int = 0):
+        await self._ensure_db()
+        try:
+            return await db.invoices.find_many(
+                where={'student': {'schoolId': school_id}},
+                take=take,
+                skip=skip,
+                order={'createdAt': 'desc'}
+            )
         finally:
             await db.disconnect()

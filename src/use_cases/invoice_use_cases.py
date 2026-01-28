@@ -31,8 +31,8 @@ class UpdateInvoiceUseCase:
     def __init__(self, repository: InvoiceRepository):
         self.repository = repository
 
-    async def execute(self, id: int, name: str, amount: int, student_id: int):
-        return await self.repository.update(id, name, amount, student_id)
+    async def execute(self, id: int, data: dict):
+        return await self.repository.update(id, data)
 
 class DeleteInvoiceUseCase:
     def __init__(self, repository: InvoiceRepository):

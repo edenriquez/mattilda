@@ -43,13 +43,17 @@ class SchoolResponse(SchoolBase):
 class InvoiceBase(BaseModel):
     name: str
     amount: int
+    paid: bool
     student_id: int
 
 class InvoiceCreate(InvoiceBase):
     pass
 
-class InvoiceUpdate(InvoiceBase):
-    pass
+class InvoiceUpdate(BaseModel):
+    name: Optional[str] = None
+    amount: Optional[int] = None
+    paid: Optional[bool] = None
+    student_id: Optional[int] = None
 
 class InvoicePath(BaseModel):
     invoice_id: int = Field(..., description="The ID of the invoice")
@@ -79,3 +83,13 @@ class InvoiceEnvelope(BaseModel):
 # TODO: implement this
 class SchoolWithStudentsResponse(SchoolResponse):
     students: List[StudentResponse]
+
+class Statement(BaseModel):
+    total_billed: int
+    total_paid: int
+    total_unpaid: int
+
+class SchoolStatementResponse(BaseModel):
+    school: SchoolResponse
+    statement: Statement
+    invoices: List[InvoiceResponse]

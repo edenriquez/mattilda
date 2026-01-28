@@ -42,6 +42,7 @@ model invoices {
     studentId Int
     name      String
     amount    BigInt
+    paid      Boolean  @default(false)
     createdAt DateTime @default(now())
     student   students @relation(fields: [studentId], references: [id], onDelete: Cascade)
 

@@ -1,4 +1,7 @@
 from src.repositories.school_repository import SchoolRepository
+from src.repositories.school_statement_repository import SchoolStatementRepository
+from src.repositories.invoice_repository import InvoiceRepository
+from src.schemas.schemas import SchoolBase, Statement, InvoiceResponse
 
 class GetSchoolsUseCase:
     def __init__(self, repository: SchoolRepository):
@@ -40,3 +43,20 @@ class DeleteSchoolUseCase:
 
     async def execute(self, id: int):
         return await self.repository.delete(id)
+
+
+class GetSchoolStatementUseCase:
+    def __init__(self, repository: SchoolRepository, statement_repository: SchoolStatementRepository, invoice_repository: InvoiceRepository):
+        self.repository = repository
+        self.statement_repository = statement_repository
+        self.invoice_repository = invoice_repository
+
+    async def execute(self, id: int):
+        school = await self.repository.find_by_id(id)
+        if not school:
+            return None, None, None
+            
+        statement = await self.statement_repository.find_with_statement(id)
+        invoices = await self.invoice_repository.find_by_school(id, take=20)
+        
+        return school, statement, invoices

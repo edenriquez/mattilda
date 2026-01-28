@@ -15,13 +15,11 @@ async def create_invoice(body: InvoiceCreate):
     use_case = CreateInvoiceUseCase(invoice_repository)
     invoice = await use_case.execute(body.name, body.amount, body.student_id)
     
-    # Debug: Print fields if error persists
-    # print(f"DEBUG: Invoice fields: {invoice.dict().keys()}")
-    
     return InvoiceResponse(
         id=invoice.id,
         name=invoice.name,
         amount=invoice.amount,
+        paid=invoice.paid,
         student_id=invoice.studentId,
         createdAt=invoice.createdAt
     ).dict(), 201
@@ -36,6 +34,7 @@ async def get_invoices(query: PaginationParams):
             id=i.id,
             name=i.name,
             amount=i.amount,
+            paid=i.paid,
             student_id=i.studentId,
             createdAt=i.createdAt
         ) for i in invoices],
@@ -45,10 +44,13 @@ async def get_invoices(query: PaginationParams):
 @invoice_router.patch("/<int:invoice_id>", responses={"200": InvoiceResponse})  
 async def update_invoice(path: InvoicePath, body: InvoiceUpdate):
     use_case = UpdateInvoiceUseCase(invoice_repository)
-    invoice = await use_case.execute(path.invoice_id, body.name)
+    invoice = await use_case.execute(path.invoice_id, body.dict(exclude_unset=True))
     return InvoiceResponse(
         id=invoice.id,
         name=invoice.name,
+        amount=invoice.amount,
+        paid=invoice.paid,
+        student_id=invoice.studentId,
         createdAt=invoice.createdAt
     ).dict(), 200
 
@@ -60,5 +62,8 @@ async def delete_invoice(path: InvoicePath):
     return InvoiceResponse(
         id=invoice.id,
         name=invoice.name,
+        amount=invoice.amount,
+        paid=invoice.paid,
+        student_id=invoice.studentId,
         createdAt=invoice.createdAt
     ).dict(), 200
