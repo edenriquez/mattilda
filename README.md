@@ -2,6 +2,8 @@
 
 A full-stack application for managing schools, students, and financial statements.
 
+![Mattilda Dashboard Preview](assets/image.png)
+
 ## Project Structure
 ```text
 .
