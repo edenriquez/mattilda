@@ -57,6 +57,6 @@ class GetSchoolStatementUseCase:
             return None, None, None
             
         statement = await self.statement_repository.find_with_statement(id)
-        invoices = await self.invoice_repository.find_by_school(id, take=20)
+        invoices = await self.invoice_repository.find_by_school(id)
         
         return school, statement, invoices

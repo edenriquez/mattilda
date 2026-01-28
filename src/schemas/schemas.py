@@ -93,3 +93,8 @@ class SchoolStatementResponse(BaseModel):
     school: SchoolResponse
     statement: Statement
     invoices: List[InvoiceResponse]
+
+class StudentStatementResponse(BaseModel):
+    student: StudentResponse
+    statement: Statement
+    invoices: List[InvoiceResponse]

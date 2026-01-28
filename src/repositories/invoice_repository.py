@@ -40,7 +40,6 @@ class InvoiceRepository:
 
     async def update(self, invoice_id: int, data: dict):
         await self._ensure_db()
-        # Map student_id to studentId for Prisma
         if 'student_id' in data:
             data['studentId'] = data.pop('student_id')
             
@@ -59,14 +58,20 @@ class InvoiceRepository:
         finally:
             await db.disconnect()
 
-    async def find_by_school(self, school_id: int, take: int = 20, skip: int = 0):
+    async def find_by_school(self, school_id: int):
         await self._ensure_db()
         try:
             return await db.invoices.find_many(
                 where={'student': {'schoolId': school_id}},
-                take=take,
-                skip=skip,
-                order={'createdAt': 'desc'}
+            )
+        finally:
+            await db.disconnect()
+
+    async def find_by_student(self, student_id: int):
+        await self._ensure_db()
+        try:
+            return await db.invoices.find_many(
+                where={'studentId': student_id}
             )
         finally:
             await db.disconnect()
