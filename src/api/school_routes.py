@@ -14,7 +14,11 @@ school_router = APIBlueprint("school", __name__, url_prefix="/api/schools", abp_
 async def create_school(body: SchoolCreate):
     use_case = CreateSchoolUseCase(school_repository)
     school = await use_case.execute(body.name)
-    return SchoolResponse(**school.dict()).dict(), 201
+    return SchoolResponse(
+        id=school.id,
+        name=school.name,
+        createdAt=school.createdAt
+    ).dict(), 201
 
 @school_router.get("/", responses={"200": SchoolEnvelope})
 async def get_schools(query: PaginationParams):
@@ -22,6 +26,10 @@ async def get_schools(query: PaginationParams):
     schools, pagination = await use_case.execute(page=query.page, per_page=query.per_page)
     
     return SchoolEnvelope(
-        data=[SchoolResponse(**s.dict()) for s in schools],
+        data=[SchoolResponse(
+            id=s.id,
+            name=s.name,
+            createdAt=s.createdAt
+        ) for s in schools],
         pagination=pagination
     ).dict(), 200

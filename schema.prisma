@@ -9,7 +9,29 @@ datasource db {
 }
 
 model schools {
+    id        Int        @id @default(autoincrement())
+    name      String     @unique
+    createdAt DateTime   @default(now())
+    students  students[]
+
+    @@index([name])
+}
+
+// NOTES:
+// One student only belongs to one school thats why i created this foreign key and not a many to many relationship
+// When serching for students there should be these scenarios
+// 1. Search student by name
+// 2. Filter students by school
+// 3. Search student by school and name
+
+model students {
     id        Int      @id @default(autoincrement())
-    name      String   @unique
+    name      String
+    schoolId  Int
     createdAt DateTime @default(now())
+    school    schools  @relation(fields: [schoolId], references: [id])
+
+    @@index([name])
+    @@index([schoolId])
+    @@index([schoolId, name])
 }
