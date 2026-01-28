@@ -1,0 +1,5 @@
+flask[async]
+flask-openapi3[swagger]
+pydantic
+prisma
+python-dotenv
