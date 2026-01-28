@@ -3,3 +3,4 @@ flask-openapi3[swagger]
 pydantic
 prisma
 python-dotenv
+flask-cors

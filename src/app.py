@@ -6,12 +6,14 @@ from src.api.student_routes import student_router
 from src.api.invoice_routes import invoice_router
 from dotenv import load_dotenv
 from flask import redirect
+from flask_cors import CORS
 
 load_dotenv()
 
 def create_app():
     info = Info(title="Mattilda API", version="1.0.0")
     app = OpenAPI(__name__, info=info)
+    CORS(app)
 
     app.register_api(school_router)
     app.register_api(student_router)
