@@ -25,3 +25,17 @@ class GetStudentsUseCase:
             "total": total,
             "total_pages": total_pages
         }
+
+class UpdateStudentUseCase:
+    def __init__(self, repository: StudentRepository):
+        self.repository = repository
+
+    async def execute(self, student_id: int, name: str):
+        return await self.repository.update(student_id=student_id, name=name)
+
+class DeleteStudentUseCase:
+    def __init__(self, repository: StudentRepository):
+        self.repository = repository
+
+    async def execute(self, student_id: int):
+        return await self.repository.delete(student_id=student_id)

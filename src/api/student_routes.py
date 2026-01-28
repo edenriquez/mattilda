@@ -1,7 +1,7 @@
 from flask_openapi3 import APIBlueprint, Tag
-from src.schemas.schemas import StudentCreate, StudentResponse, StudentEnvelope, PaginationParams
+from src.schemas.schemas import StudentCreate, StudentResponse, StudentEnvelope, PaginationParams, StudentPath, StudentUpdate
 from src.repositories.student_repository import StudentRepository
-from src.use_cases.student_use_cases import CreateStudentUseCase, GetStudentsUseCase
+from src.use_cases.student_use_cases import CreateStudentUseCase, GetStudentsUseCase, UpdateStudentUseCase, DeleteStudentUseCase
 from typing import List
 
 student_tag = Tag(name="Student", description="Student management")
@@ -41,4 +41,26 @@ async def get_students(query: PaginationParams):
             ) for s in students
         ],
         pagination=pagination
+    ).dict(), 200
+
+@student_router.patch("/<int:student_id>", responses={"200": StudentResponse})
+async def update_student(path: StudentPath, body: StudentUpdate):
+    use_case = UpdateStudentUseCase(student_repository)
+    student = await use_case.execute(path.student_id, body.name)
+    return StudentResponse(
+        id=student.id,
+        name=student.name,
+        school_id=student.schoolId,
+        createdAt=student.createdAt
+    ).dict(), 200
+
+@student_router.delete("/<int:student_id>", responses={"200": StudentResponse})
+async def delete_student(path: StudentPath):
+    use_case = DeleteStudentUseCase(student_repository)
+    student = await use_case.execute(path.student_id)
+    return StudentResponse(
+        id=student.id,
+        name=student.name,
+        school_id=student.schoolId,
+        createdAt=student.createdAt
     ).dict(), 200

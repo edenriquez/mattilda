@@ -37,3 +37,20 @@ class SchoolRepository:
             return await db.schools.count()
         finally:
             await db.disconnect()
+
+    async def update(self, school_id: int, name: str):
+        await self._ensure_db()
+        try:
+            return await db.schools.update(
+                where={'id': school_id},
+                data={'name': name}
+            )
+        finally:
+            await db.disconnect()
+
+    async def delete(self, school_id: int):
+        await self._ensure_db()
+        try:
+            return await db.schools.delete(where={'id': school_id})
+        finally:
+            await db.disconnect()

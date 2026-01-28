@@ -12,6 +12,12 @@ class StudentBase(BaseModel):
 class StudentCreate(StudentBase):
     school_id: int
 
+class StudentUpdate(StudentBase):
+    pass
+
+class StudentPath(BaseModel):
+    student_id: int = Field(..., description="The ID of the student")
+
 class StudentResponse(StudentBase):
     id: int
     school_id: int
@@ -23,6 +29,12 @@ class SchoolBase(BaseModel):
 
 class SchoolCreate(SchoolBase):
     pass
+
+class SchoolUpdate(SchoolBase):
+    pass
+
+class SchoolPath(BaseModel):
+    school_id: int = Field(..., description="The ID of the school")
 
 class SchoolResponse(SchoolBase):
     id: int

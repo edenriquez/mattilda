@@ -29,7 +29,7 @@ model students {
     name      String
     schoolId  Int
     createdAt DateTime @default(now())
-    school    schools  @relation(fields: [schoolId], references: [id])
+    school    schools  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
     @@index([name])
     @@index([schoolId])

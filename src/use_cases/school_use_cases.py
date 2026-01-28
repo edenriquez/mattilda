@@ -4,7 +4,7 @@ class GetSchoolsUseCase:
     def __init__(self, repository: SchoolRepository):
         self.repository = repository
 
-    async def execute(self, page: int, per_page: int):
+    async def execute(self, page: int = 1, per_page: int = 10):
         skip = (page - 1) * per_page
         
         total = await self.repository.count()
@@ -25,3 +25,18 @@ class CreateSchoolUseCase:
 
     async def execute(self, name: str):
         return await self.repository.create(name)
+
+
+class UpdateSchoolUseCase:
+    def __init__(self, repository: SchoolRepository):
+        self.repository = repository
+
+    async def execute(self, id: int, name: str):
+        return await self.repository.update(id, name)
+
+class DeleteSchoolUseCase:
+    def __init__(self, repository: SchoolRepository):
+        self.repository = repository
+
+    async def execute(self, id: int):
+        return await self.repository.delete(id)

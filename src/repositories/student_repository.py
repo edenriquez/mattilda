@@ -37,3 +37,20 @@ class StudentRepository:
             return await db.students.count()
         finally:
             await db.disconnect()
+
+    async def update(self, student_id: int, name: str):
+        await self._ensure_db()
+        try:
+            return await db.students.update(
+                where={'id': student_id},
+                data={'name': name}
+            )
+        finally:
+            await db.disconnect()
+
+    async def delete(self, student_id: int):
+        await self._ensure_db()
+        try:
+            return await db.students.delete(where={'id': student_id})
+        finally:
+            await db.disconnect()
